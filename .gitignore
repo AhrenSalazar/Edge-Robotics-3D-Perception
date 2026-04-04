@@ -1,0 +1,22 @@
+# Ignore the massive full dataset and OpenPCDet weights
+dataset/
+OpenPCDet/
+*.pth
+
+# Ignore all .bin and .txt files globally to prevent accidental large uploads...
+*.bin
+*.txt
+
+# ...BUT allow the test dataset and requirements file to bypass the block!
+!test_dataset/**/*.bin
+!test_dataset/**/*.txt
+!requirements.txt
+
+# Local output directories and junk files
+*.png
+__pycache__/
+*.pyc
+.DS_Store
+final_rf_results/
+final_ridge_results/
+benchmark_results.csv

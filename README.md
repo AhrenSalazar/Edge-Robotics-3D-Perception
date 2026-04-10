@@ -40,10 +40,34 @@ Models were trained on 2,000 KITTI frames and evaluated on 187 strictly unseen s
 | **Max BEV IoU** | 0.76 | Proves the underlying math works perfectly *if* the object happens to align with the exact grid layout the model memorized during training. |
 | **Depth Error** | ~5.17m | Slightly better depth tracking than the linear model. |
 
+---
+
+## 3. Near-Field Accuracy Evaluation (10m Edge Robotics Domain)
+To optimize the 256-feature vector for real-world edge robotics (e.g., warehouse AGVs, delivery rovers), the evaluation domain was constrained to a **10-meter near-field radius**. 
+
+Models were trained on 2,000 KITTI frames (yielding 773 valid near-field objects) and evaluated on 83 strictly unseen near-field objects. We used the official `Tr_velo_to_cam` calibration matrix to accurately align the LiDAR points.
+
+### Model A: Linear Ridge Regression
+| Metric | Score | Note |
+| :--- | :--- | :--- |
+| **Average BEV IoU** | 0.0958 ± 0.16 | Linear math still struggles to consistently map 1D flattened arrays to 3D boxes. |
+| **Depth Error** | 1.30m ± 0.84m | Usable for rough forward-distance estimation, but outperformed by non-linear models. |
+
+### Model B: Random Forest (100 Trees)
+| Metric | Score | Note |
+| :--- | :--- | :--- |
+| **Average BEV IoU** | 0.2757 ± 0.31 | A massive improvement over the linear baseline, proving non-linear trees are required to decode rigid grid boundaries. |
+| **Max BEV IoU** | 0.9504 | Near-perfect bounding box generation when the object aligns perfectly with the learned grid layout. |
+| **Depth Error** | 0.94m ± 0.90m | **Sub-meter accuracy.** Excellent forward-distance tracking for proximity detection. |
+
+---
+
 ## The Takeaway
 This experiment demonstrats the extreme limits of the accuracy-vs-latency tradeoff in 3D perception. By flattening a 3D occupancy grid into a 256-feature array, Occupancy-SCOPE achieves  **sub-millisecond latency (2700+ Hz) on a standard CPU**.
 
 While the model's high Max IoU (0.76) proves the feature extraction works when objects align with the grid, the drop in average IoU on unseen data illustrates *why* deep learning models use sliding-window convolutions: to achieve translation invariance. If a car shifts one meter to the right, it crosses voxel boundaries, the 1D array changes completely, and the regressor fails to recognize it.
+
+However, when attempting to evaluate objects at a full 40m autonomous driving range, the model failed due to this lack of translation invariance. By constraining the operating domain to 10 meters—quadrupling the effective voxel resolution to 0.31m—the model achieved sub-meter depth accuracy (0.94m) and a 10x jump in average IoU.
 
 **Conclusion:** While it won't replace a heavy neural network for primary bounding-box perception, Occupancy-SCOPE is highly effective at what it was designed for extreme speed. Its true real-world application lies in acting as an really fast, redundant "safety shield" or a first-pass proximity warning for edge robots that do not have the GPU hardware to run PointPillars.
 
@@ -53,9 +77,16 @@ While the model's high Max IoU (0.76) proves the feature extraction works when o
 ```bash
 python lab_benchmarker.py --num_samples 10
 
-**1. Test the Accuracy:**
+**1. Test the Accuracy 40m:**
 ** Linear Evaluation **
 python scope_eval_ridge.py --data_path dataset/training --num_train 2000 --num_viz 200
 
 ** Random Forest Evaluation **
 python scope_eval_rf.py --data_path dataset/training --num_train 2000 --num_viz 200
+
+**2. Test the Accuracy 10m:**
+** Linear Evaluation **
+python scope_eval_ridge_10m.py --data_path dataset/training --num_train 2000 --num_viz 200
+
+** Random Forest Evaluation **
+python scope_eval_rf_10m.py --data_path dataset/training --num_train 2000 --num_viz 200

@@ -37,13 +37,13 @@ Models were trained on 2,000 KITTI frames and evaluated on 187 strictly unseen s
 | Metric | Score | Note |
 | :--- | :--- | :--- |
 | **Average BEV IoU** | ~0.03 | A 3x improvement over linear math, but still struggles to generalize to unseen spatial distributions. |
-| **Max BEV IoU** | 0.76 | Proves the underlying math works perfectly *if* the object happens to align with the exact grid layout the model memorized during training. |
+| **Max BEV IoU** | 0.76 | Proves the underlying math works *if* the object happens to align with the exact grid layout the model memorized during training. |
 | **Depth Error** | ~5.17m | Slightly better depth tracking than the linear model. |
 
 ---
 
 ## 3. Near-Field Accuracy Evaluation (10m Edge Robotics Domain)
-To optimize the 256-feature vector for real-world edge robotics (e.g., warehouse AGVs, delivery rovers), the evaluation domain was constrained to a **10-meter near-field radius**. 
+To optimize the 256-feature vector for edge robotics, the evaluation domain is constrained to a **10-meter near-field radius**. 
 
 Models were trained on 2,000 KITTI frames (yielding 773 valid near-field objects) and evaluated on 83 strictly unseen near-field objects. We used the official `Tr_velo_to_cam` calibration matrix to accurately align the LiDAR points.
 
@@ -69,7 +69,7 @@ While the model's high Max IoU (0.76) proves the feature extraction works when o
 
 However, when attempting to evaluate objects at a full 40m autonomous driving range, the model failed due to this lack of translation invariance. By constraining the operating domain to 10 meters—quadrupling the effective voxel resolution to 0.31m—the model achieved sub-meter depth accuracy (0.94m) and a 10x jump in average IoU.
 
-**Conclusion:** While it won't replace a heavy neural network for primary bounding-box perception, Occupancy-SCOPE is highly effective at what it was designed for extreme speed. Its true real-world application lies in acting as an really fast, redundant "safety shield" or a first-pass proximity warning for edge robots that do not have the GPU hardware to run PointPillars.
+**Conclusion:** While it obiously won't replace a heavy neural network for primary bounding-box perception, Occupancy-SCOPE is highly effective at what it was designed for extreme speed. Its real-world application is in acting as an really fast, redundant "safety shield" or a first-pass proximity warning for edge robots that do not have the GPU hardware to run PointPillars.
 
 ## How to Run
 

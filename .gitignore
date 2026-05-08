@@ -1,22 +1,12 @@
-# Ignore the massive full dataset and OpenPCDet weights
-dataset/
-OpenPCDet/
-*.pth
-
-# Ignore all .bin and .txt files globally to prevent accidental large uploads...
-*.bin
-*.txt
-
-# ...BUT allow the test dataset and requirements file to bypass the block!
-!test_dataset/**/*.bin
-!test_dataset/**/*.txt
-!requirements.txt
-
-# Local output directories and junk files
-*.png
+# Python cache and OS junk
 __pycache__/
 *.pyc
 .DS_Store
-final_rf_results/
-final_ridge_results/
-benchmark_results.csv
+
+# Ignore all raw point cloud binaries and data arrays globally
+*.bin
+*.npy
+
+# Ignore any dataset folders in case they are added back later
+dataset/
+test_dataset/

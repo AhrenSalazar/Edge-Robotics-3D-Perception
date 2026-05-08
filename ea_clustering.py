@@ -1,7 +1,7 @@
 """
 Evolutionary Algorithm
 
-This script runs a Hill Climbing Evolutionary Algorithm to optimize bounding box 
+Runs a Genetic Algorithm to optimize bounding box 
 placement around LiDAR point clusters. It generates random bounding boxes and 
 incrementally mutates them, keeping mutations that improve the 'fitness' (how well 
 the box covers the points while minimizing empty space). Used to benchmark 

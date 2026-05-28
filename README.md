@@ -16,7 +16,7 @@ Models were evaluated on their ability to map the 256-feature array to physical 
 
 | Method | BEV Fitness (Accuracy) | Depth Error (Safety) | Inference Latency | Hardware Viable? |
 | :--- | :--- | :--- | :--- | :--- |
-| **Ridge Regression** | **0.89** | **0.06m ± 0.06m** | **0.36 ms** | **Yes** |
+| **Ridge Regression** | **0.89** | **0.1126m ± 0.0024m** | **0.0432 ms** | **Yes** |
 | Random Forest | 0.90 | 0.15m ± 0.15m | 0.50 ms | Yes |
 | Evolutionary Alg. | 0.49 | N/A | 26.37 ms | Too Slow |
 | Proximal Policy Opt. | 0.39 | N/A | 2581.11 ms | No |

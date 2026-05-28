@@ -49,15 +49,20 @@ This cascade approach allows the CPU to dynamically allocate compute power only 
 
 Make sure your environment is set up and the KITTI dataset is correctly linked in a `dataset/training/velodyne/` directory.
 
-**1. Evaluate Linear Math (Ridge Regression)**
+
+**1. Evaluate Robustness (5-Run Average)**
+```bash
+python eval.py
+```
+**2. Evaluate Linear Math (Ridge Regression)**
 ```bash
 python eval_ridge.py --test_size 0.2
 ```
-**2. Evaluate Machine Learning (Random Forest)**
+**3. Evaluate Machine Learning (Random Forest)**
 ```bash
 python eval_rf.py --test_size 0.2
 ```
-**3. Evaluate Iterative AI (Evolutionary Algorithm)**
+**4. Evaluate Iterative AI (Evolutionary Algorithm)**
 ```bash
 python ea_clustering.py --num_samples 100
 ```
